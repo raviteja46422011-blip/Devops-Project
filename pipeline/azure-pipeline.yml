@@ -1,0 +1,32 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- script: |
+    echo Installing Terraform
+    sudo apt-get update
+    sudo apt-get install -y terraform
+  displayName: Install Terraform
+
+- script: |
+    cd terraform
+    terraform init
+    terraform apply -auto-approve
+  displayName: Create Infrastructure
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'webapp'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/webapp.zip'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'AzureServiceConnection' 
+    appName: 'devopswebapp1998'
+    package: '$(Build.ArtifactstagingDirectory)/webapp.zip'
