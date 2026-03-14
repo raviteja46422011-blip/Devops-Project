@@ -6,6 +6,10 @@ pool:
 
 steps:
 
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: '1.6.6'
+
 - script: |
     cd terraform
     terraform init
@@ -24,6 +28,7 @@ steps:
     azureSubscription: 'Azure Subscription 1' 
     appName: 'devopswebapp1998'
     package: '$(Build.ArtifactstagingDirectory)/webapp.zip'
+
 
 
 
